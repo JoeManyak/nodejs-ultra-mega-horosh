@@ -1,12 +1,9 @@
-const {Style} = require("./style");
-const {Author} = require("./author");
-const {Genre} = require("./genre");
+const req = require('../database/database')
 
-const books = []
-let index = 0
+const tableName = 'books'
 
 class Book {
-    constructor(name, description, author, genre, style, pages, publisher, id = -1) {
+    constructor(name, description, author, genre, style, pages, id = -1) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -16,56 +13,22 @@ class Book {
         this.pages = pages;
     }
 
-    save() {
-        //validation
-        if (Style.getByID(this.style) === undefined) {
-            throw "No such style"
-        }
-
-        if (Author.getByID(this.author) === undefined) {
-            throw "No such author"
-        }
-
-        if (Genre.getByID(this.genre) === undefined) {
-            throw "No such genre"
-        }
-        this.id = index
-        books.push(this)
-
-        index++
+    async save() {
+        await req.query('INSERT INTO ' + tableName +
+            ' (name, description, author, genre, style, pages) VALUES (?,?,?,?,?,?)',
+            [this.name, this.description, this.author, this.genre, this.style, this.pages])
     }
 
-    static getAll() {
-        return books
+    static async getAll() {
+        return await req.query('SELECT * FROM ' + tableName)
     }
 
-    static getByID(id) {
-        for (let i = 0; i < books.length; i++) {
-            if (books[i].id === parseInt(id)) {
-                return books[i]
-            }
-        }
-        return undefined
+    static async deleteByID(id) {
+        return await req.query(`DELETE FROM `+tableName+` WHERE id = ?`, id)
     }
 
-    static deleteByID(id) {
-       for (let i = 0; i < books.length; i++) {
-            if (books[i].id === parseInt(id)) {
-                books.splice(id,1)
-                return true
-            }
-       }
-       return false
-    }
-
-    static searchByName(name){
-        let tempBooks = []
-        for (let i = 0; i < books.length; i++) {
-            if (books[i].name === name) {
-                tempBooks.push(books[i])
-            }
-        }
-        return tempBooks
+    static async searchByName(name) {
+        return await req.query(`SELECT * FROM `+tableName+` WHERE name = ?`,name)
     }
 }
 

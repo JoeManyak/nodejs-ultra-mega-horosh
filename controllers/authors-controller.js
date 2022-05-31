@@ -1,15 +1,15 @@
 const {Author} = require("../models/author");
 
-exports.getAll = function (req, res) {
-    res.send(Author.getAll())
+exports.getAll = async function (req, res) {
+    res.send(await Author.getAll())
 }
 
-exports.create = function (req, res) {
+exports.create = async function (req, res) {
     let newAuthor = new Author(req.body.firstname, req.body.lastname)
     try {
-        newAuthor.save()
+        await newAuthor.save()
     } catch (e) {
-        res.send(e)
+        res.send("Not created!")
         return
     }
     res.send("Success!")

@@ -1,15 +1,15 @@
 const {Genre} = require("../models/genre");
 
-exports.getAll = function (req, res) {
-    res.send(Genre.getAll())
+exports.getAll = async function (req, res) {
+    res.send(await Genre.getAll())
 }
 
-exports.create = function (req, res) {
+exports.create = async function (req, res) {
     let newGenre = new Genre(req.body.name, req.body.description)
     try {
-        newGenre.save()
+        await newGenre.save()
     } catch (e) {
-        res.send(e)
+        res.send("Not created!")
         return
     }
     res.send("Success!")

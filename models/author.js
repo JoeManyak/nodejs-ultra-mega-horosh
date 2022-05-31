@@ -1,32 +1,21 @@
-const authors = []
-let index = 0
+const req = require("../database/database");
 
+const tableName = 'authors'
 class Author {
-    constructor(firstname, lastname, birthdate, id) {
+    constructor(firstname, lastname, id) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.birthdate = birthdate;
         this.id = id;
     }
 
-    save() {
-        this.id = index
-        authors.push(this)
-
-        index++
+    async save() {
+        await req.query('INSERT INTO ' + tableName +
+            ' (firstname, lastname) VALUES (?,?)',
+            [this.firstname, this.lastname])
     }
 
-    static getAll() {
-        return authors
-    }
-
-    static getByID(id) {
-        for (let i = 0; i< authors.length;i++) {
-            if (authors[i].id === parseInt(id)) {
-                return authors[i]
-            }
-        }
-        return undefined
+    static async getAll() {
+        return await req.query('SELECT * FROM ' + tableName)
     }
 }
 

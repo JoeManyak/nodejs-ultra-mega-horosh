@@ -1,6 +1,6 @@
-const genres = []
-let index = 0
+const req = require('../database/database')
 
+const tableName = 'genres'
 class Genre {
     constructor(name, description, id) {
         this.name = name;
@@ -8,24 +8,14 @@ class Genre {
         this.id = id
     }
 
-    save() {
-        this.id = index
-        genres.push(this)
-
-        index++
+    async save() {
+        await req.query('INSERT INTO ' + tableName +
+            ' (name, description) VALUES (?,?)',
+            [this.name, this.description])
     }
 
-    static getAll() {
-        return genres
-    }
-
-    static getByID(id) {
-        for (let i = 0; i< genres.length;i++) {
-            if (genres[i].id === parseInt(id)) {
-                return genres[i]
-            }
-        }
-        return undefined
+    static async getAll() {
+        return await req.query('SELECT * FROM ' + tableName)
     }
 }
 

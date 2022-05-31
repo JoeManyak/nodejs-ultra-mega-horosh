@@ -1,6 +1,6 @@
-const styles = []
-let index = 0
+const req = require("../database/database");
 
+const tableName = 'styles'
 class Style {
     constructor(name, description, id) {
         this.name = name;
@@ -8,25 +8,17 @@ class Style {
         this.id = id;
     }
 
-    save() {
-        this.id = index
-        styles.push(this)
-
-        index++
+    async save() {
+        await req.query('INSERT INTO ' + tableName +
+            ' (name, description) VALUES (?,?)',
+            [this.name, this.description])
     }
 
-    static getAll() {
-        return styles
+    static async getAll() {
+        return await req.query('SELECT * FROM ' + tableName)
     }
 
-    static getByID(id) {
-        for (let i = 0; i< styles.length;i++) {
-            if (styles[i].id === parseInt(id)) {
-                return styles[i]
-            }
-        }
-        return undefined
-    }
 }
+
 
 module.exports = {Style}
