@@ -2,10 +2,9 @@ const authors = []
 let index = 0
 
 class Author {
-    constructor(firstname, lastname, birthdate, id) {
+    constructor(firstname, lastname, id) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.birthdate = birthdate;
         this.id = id;
     }
 
