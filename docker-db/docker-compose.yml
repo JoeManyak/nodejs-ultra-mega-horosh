@@ -1,0 +1,15 @@
+version: "3"
+services:
+  db-service:
+    build: ./database
+    container_name: db
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lab
+    restart: always
+    ports:
+      - "3306:3306"
+volumes:
+  data:
