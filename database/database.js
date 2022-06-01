@@ -1,5 +1,6 @@
 const mysql = require('mysql')
 
+//getConnecting — is using for creating connection to mysql server
 function getConnection() {
     return mysql.createConnection({
         host: "localhost",
@@ -10,6 +11,7 @@ function getConnection() {
     })
 }
 
+//query is using to send query to mysql server and returning promise with result data
 function query(query, args) {
     const con = getConnection()
     return new Promise((resolve, reject) => {
